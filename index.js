@@ -10,6 +10,11 @@ const PORT = 3000;
 app.use(cors());
 app.use(express.json());
 
+app.use((req,res,next) => {
+    console.log(`${req.method} ${req.url} ${req.hostname}`);
+    next();
+})
+
 app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoutes);
 
