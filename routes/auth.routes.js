@@ -42,7 +42,7 @@ router.post("/login", async (req, res) => {
   if (!valid) return res.status(401).json({ message: "Invalid credentials" });
 
   // Создаём access token (короткий)
-  const accessToken = jwt.sign({ userId: user.id }, SECRET, { expiresIn: "15m" });
+  const accessToken = jwt.sign({ userId: user.id }, SECRET, { expiresIn: "1d" });
   // Создаём refresh token (долго живущий)
   const refreshToken = jwt.sign({ userId: user.id }, REFRESH_SECRET, { expiresIn: "7d" });
 
@@ -55,7 +55,7 @@ router.post("/login", async (req, res) => {
   });
 
   logger.info(`User ${user.id} logged in`);
-
+  console.log(accessToken)
   res.json({ accessToken });
 });
 
@@ -88,6 +88,7 @@ router.post("/logout", (req, res) => {
  * PROFILE (protected)
  */
 router.get("/profile", auth, async (req, res) => {
+
   const user = await knex("users")
     .select("id", "email","info","likes")
     .where({ id: req.userId })
